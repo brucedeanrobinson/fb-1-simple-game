@@ -51,7 +51,7 @@ function App() {
 
     // check tie (board is full, so there isn't a win which would've been handled above)
     // loop thru every row, checking every cell for non-null
-    board.every(row => row.every(cell => cell !== null))
+    if (board.every(row => row.every(cell => cell !== null))) return 'tie'
 
     // else return null
     return null;
@@ -59,18 +59,27 @@ function App() {
 
   return (
     <div className="h-screen w-screen bg-black flex items-center justify-center">
-      <div className="grid grid-cols-3 grid-rows-3 w-[300px] h-[300px]">
-        {game.board.map((row, rowIndex) => 
-          row.map((cell, colIndex) => (
-            <div
-              key={`${rowIndex}-${colIndex}`}
-              className="aspect-square border-2 border-white flex items-center justify-center text-5xl text-white cursor-pointer"
-              onClick={() => move(rowIndex, colIndex)}
-            >
-              {cell}
-            </div>
-          ))
-        )}
+      <div className="flex flex-col items-center space-y-4">
+        <div className="grid grid-cols-3 grid-rows-3 w-[300px] h-[300px]">
+          {game.board.map((row, rowIndex) => 
+            row.map((cell, colIndex) => (
+              <div
+                key={`${rowIndex}-${colIndex}`}
+                className="aspect-square border-2 border-white flex items-center justify-center text-5xl text-white cursor-pointer"
+                onClick={() => move(rowIndex, colIndex)}
+              >
+                {cell}
+              </div>
+            ))
+          )}
+        </div>
+        <div className="text-white text-xl h-6">
+          {game.endState === 'x' || game.endState === 'o'
+          ? `Player ${game.endState} wins!`
+          : game.endState === 'tie'
+          ? 'Tie game!'
+          : <span className="invisible">Game in progress...</span>}
+        </div>
       </div>
     </div>
   )
