@@ -1,21 +1,22 @@
-// types
 
-// game
-// board
-// cell
-// player
-
-// coords
 type Player = 'x' | 'o'
 
 type Cell = Player | null
 
-type Board = Cell[][]
+export type Board = Cell[][]
 
-type EndState = ''
+export type EndState = 'x' | 'o' | 'tie' | null
 
-type Game = {
+export type Game = {
   board: Board,
   currentPlayer: Player,
-  endState?: EndState
+  endState: EndState
+}
+
+export function InitialGameState(): Game {
+  return {
+    board: Array.from({length: 3}, () => Array(3).fill(null)),
+    currentPlayer: 'x',
+    endState: null
+  }
 }
