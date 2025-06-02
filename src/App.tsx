@@ -30,8 +30,28 @@ function App() {
 
   const getEndState = (board: Board): EndState => {
     // check wins
+    // row
+    for (let i = 0; i < 3; i++) {
+      const [a, b, c] = board[i]
+      if (a && a === b && a === c) return a
+    }
 
-    // check tie
+    //col
+    for (let j = 0; j < 3; j++) {
+      const a = board[0][j]
+      const b = board[1][j]
+      const c = board[2][j]
+      if (a && a === b && a === c) return a
+    }
+
+    //diagonals
+    const center = board[1][1]
+    if (center && center === board[0][0] && center === board[2][2]) return center
+    if (center && center === board[0][2] && center === board[2][0]) return center
+
+    // check tie (board is full, so there isn't a win which would've been handled above)
+    // loop thru every row, checking every cell for non-null
+    board.every(row => row.every(cell => cell !== null))
 
     // else return null
     return null;
