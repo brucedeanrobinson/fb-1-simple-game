@@ -9,13 +9,13 @@ A simple version of your game should have the following:
  - [x] Track game state (board, current player, etc.)
  - [x] Allow users to calculate moves
  - [x] Handle move validation
- - [ ] Detect win/lose/draw conditions
+ - [x] Detect win/lose/draw conditions
 
  Frontend/React Game Interface
  - [x] Display current game state
  - [x] Allow players to make moves by using the game engine
- - [ ] Show game status (whose turn, winner, etc.)
- - [ ] Reset/restart game functionality
+ - [x] Show game status (whose turn, winner, etc.)
+ - [just refresh lol] Reset/restart game functionality
 
 Bonus:
  [Styling] - Make it look sexy. Add animations for game moves (react-spring, framer, keyframes)
