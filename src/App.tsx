@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import './App.css'
-import { initialGameState, move, } from './game/game'
+import { initialGameState, move } from './shared/game'
+import type { Game } from './shared/types'
 
 function App() {
-  const [game, setGame] = useState(initialGameState())
+  const [game, setGame] = useState<Game>(initialGameState())
 
   const clickCell = (row: number, col: number) => {
     setGame(prev => move(prev, row, col))
