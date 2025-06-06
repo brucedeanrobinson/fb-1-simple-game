@@ -21,3 +21,31 @@ Bonus:
  [Styling] - Make it look sexy. Add animations for game moves (react-spring, framer, keyframes)
  [Routing] - Multiple pages with navigation: - [ ] Start/menu page with game mode selection (Player vs Player, Player vs AI) - [ ] Game page for active gameplay
  [Algorithms] - Player vs AI modes: start with random moves, then implement minimax or other algorithms for calculating optimal moves
+
+### File structure ex
+src/App.tsx
+server/server.js
+shared/types.ts & game.ts
+
+### Adding databases
+- [x] Vite-Express
+    - replace bun dev script with bun run --watch server.ts, check working
+- [ ] Api
+    - [ ] `api.ts`
+    - [ ] `in-memory-api.ts`
+    - [ ] `add tests for ^`
+    - [ ] add express endpoints (create, update, read)
+    - [ ] `api.client.ts`
+    - [ ] integrate `api-client` into `App.tsx`
+- [ ] PostgreSQL Supabase
+    - connects to a test db in Supabase when running locally, not polluting prod db
+- [ ] Drizzle.js
+    - [ ] `db-api.ts`
+    - [ ] swap in-mem to db
+    - run tests, run server, should work!
+- [ ] tests that pass for both the in-memory and database implementations
+- [ ] aesthetics
+- [ ] gracefully handles slow internet connections when connections are very slow
+    - use Chrome's Network Throttling to slow down your internet connection and see how the user experience degrades
+    - use useOptimistic so the UI updates even when requests are very slow
+
