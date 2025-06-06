@@ -1,7 +1,8 @@
-import type { Game, Player, EndState, Coords } from './types'
+import type { GameState, Player, EndState, Coords } from './types'
 
-export function initialGameState(): Game {
+export function createGameState(): GameState {
   return {
+    id: crypto.randomUUID(),
     board: Array.from({length: 3}, () => Array(3).fill(null)),
     currentPlayer: 'x',
     endState: null
@@ -9,7 +10,7 @@ export function initialGameState(): Game {
 }
 
 // todo type for coords, function for nextplayer, 
-export const move = (game: Game, coords: Coords): Game => {
+export const makeMove = (game: GameState, coords: Coords): GameState => {
   // if clicked square is occupied, return
   // doesn't return a game, but if we care on the client side to give feedback of a bad move then we will implement
   if (game.board[coords.row][coords.col] || game.endState) return game
@@ -23,7 +24,7 @@ export const move = (game: Game, coords: Coords): Game => {
   return { ...nextGame, currentPlayer: nextPlayer, endState: getEndState(nextGame) }
 }
 
-export const getEndState = (game: Game): EndState => {
+export const getEndState = (game: GameState): EndState => {
   const { board } = game;
 
   // check wins

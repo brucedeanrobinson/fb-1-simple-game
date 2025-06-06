@@ -8,7 +8,8 @@ export type Coords = {
   col: number
 }
 
-export type Game = {
+export type GameState = {
+  id: string,
   board: Board;
   currentPlayer: Player;
   endState: EndState;
