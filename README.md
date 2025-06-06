@@ -36,7 +36,7 @@ shared/types.ts & game.ts
 
 ### Adding databases
 - [x] Vite-Express
-    - replace bun dev script with bun run --watch server.ts, check working
+    - [x] replace bun dev script with bun run --watch server.ts, check working
 - [ ] Api
     - [ ] `api.ts`
     - [ ] `in-memory-api.ts`
@@ -45,6 +45,7 @@ shared/types.ts & game.ts
     - [ ] `api.client.ts`
     - [ ] integrate `api-client` into `App.tsx`
 - [ ] PostgreSQL Supabase
+    - [ ] .env
     - connects to a test db in Supabase when running locally, not polluting prod db
 - [ ] Drizzle.js
     - [ ] `db-api.ts`
