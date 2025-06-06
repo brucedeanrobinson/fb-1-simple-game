@@ -52,7 +52,7 @@ shared/types.ts & game.ts
   - [x] `api.client.ts`
   - [x] integrate `api-client` into `App.tsx`
 - [ ] PostgreSQL Supabase
-  - [ ] .env
+  - [x] .env
   - connects to a test db in Supabase when running locally, not polluting prod db
 - [ ] Drizzle.js
   - [ ] `db-api.ts`
