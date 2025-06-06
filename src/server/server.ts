@@ -3,6 +3,7 @@ import ViteExpress from "vite-express";
 
 // API
 import { InMemoryTicTacToeApi } from "../services/TicTacToeApi";
+import { PORT, SERVER_URL } from "../constants";
 const api = new InMemoryTicTacToeApi()
 // const api = new DbTicTacToeApi()
 
@@ -30,4 +31,4 @@ app.get("/api/game/:gameId/move", async (req, res) => {
   res.json(game)
 })
 
-ViteExpress.listen(app, 3000, () => console.log("Server is listening..."));
+ViteExpress.listen(app, PORT, () => console.log(`Server is listening... on ${SERVER_URL}`));

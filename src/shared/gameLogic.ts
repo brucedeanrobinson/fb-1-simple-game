@@ -1,6 +1,6 @@
 import type { GameState, Player, EndState, Coords } from './types'
 
-export function createGameState(): GameState {
+export function createGame(): GameState {
   return {
     id: crypto.randomUUID(),
     board: Array.from({length: 3}, () => Array(3).fill(null)),
@@ -9,7 +9,6 @@ export function createGameState(): GameState {
   }
 }
 
-// todo type for coords, function for nextplayer, 
 export const makeMove = (game: GameState, coords: Coords): GameState => {
   // if clicked square is occupied, return
   // doesn't return a game, but if we care on the client side to give feedback of a bad move then we will implement

@@ -1,17 +1,17 @@
 import type { GameState, Coords } from "../shared/types";
-import { createGameState, makeMove } from "../shared/gameLogic"
+import { createGame, makeMove } from "../shared/gameLogic"
 
 export interface TicTacToeApi { 
-  createGame(): { gameid: string; game: GameState };
-  getGame(gameId: string): GameState | null;
-  makeMove(gameId: string, coords: Coords): GameState | null;
+  createGame(): Promise<GameState>
+  getGame(gameId: string): Promise<GameState>
+  makeMove(gameId: string, coords: Coords): Promise<GameState>
 }
 
-export class InMemoryTicTacToeApi {
+export class InMemoryTicTacToeApi implements TicTacToeApi {
   private games: Map<string, GameState> = new Map();
 
   async createGame(): Promise<GameState> {
-    const game = createGameState()
+    const game = createGame()
     this.games.set(game.id, game)
     return game
   }
@@ -27,5 +27,36 @@ export class InMemoryTicTacToeApi {
     const newGame = makeMove(game, coords)
     this.games.set(gameId, newGame)
     return newGame
+  }
+}
+
+export class TicTacToeApiClient implements TicTacToeApi {
+  async createGame(): Promise<GameState> {
+    const response = await fetch("/api/game", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    const game = await response.json()
+    return game
+  }
+
+  async getGame(gameId: string): Promise<GameState> {
+    const response = await fetch(`/api/game/${gameId}`)
+    const game = await response.json()
+    return game
+  }
+
+  async makeMove(gameId: string, coords: Coords): Promise<GameState> {
+    const response = await fetch(`/api/game/${gameId}/move`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(coords)
+    })
+    const game = await response.json()
+    return game
   }
 }
