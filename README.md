@@ -1,7 +1,14 @@
-# FractalBootcamp 1-simple-game
-## TicTacToe
+# FractalBootcamp - TicTacToe
 
-### Features
+## do the things
+`nvm use 18`
+`npm i`
+`bun dev`
+
+### misc setup notes
+- installing ts types for express and vite-express `bun add -d @types/express @types/node vite-express`
+
+## Features
 A simple version of your game should have the following:
 
  Game Engine
@@ -48,4 +55,3 @@ shared/types.ts & game.ts
 - [ ] gracefully handles slow internet connections when connections are very slow
     - use Chrome's Network Throttling to slow down your internet connection and see how the user experience degrades
     - use useOptimistic so the UI updates even when requests are very slow
-
