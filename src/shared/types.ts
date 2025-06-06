@@ -3,6 +3,11 @@ export type Cell = Player | null;
 export type Board = Cell[][];
 export type EndState = Player | 'tie' | null;
 
+export type Coords = {
+  row: number,
+  col: number
+}
+
 export type Game = {
   board: Board;
   currentPlayer: Player;

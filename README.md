@@ -38,7 +38,7 @@ shared/types.ts & game.ts
 - [x] Vite-Express
     - [x] replace bun dev script with bun run --watch server.ts, check working
 - [ ] Api
-    - [ ] `api.ts`
+    - [x] `api.ts`
     - [ ] `in-memory-api.ts`
     - [ ] `add tests for ^`
     - [ ] add express endpoints (create, update, read)

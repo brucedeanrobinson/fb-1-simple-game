@@ -7,7 +7,7 @@ function App() {
   const [game, setGame] = useState<Game>(initialGameState())
 
   const clickCell = (row: number, col: number) => {
-    setGame(prev => move(prev, row, col))
+    setGame(prev => move(prev, {row, col}))
   }
 
   return (

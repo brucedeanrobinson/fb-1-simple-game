@@ -1,4 +1,4 @@
-import type { Game, Player, EndState } from './types'
+import type { Game, Player, EndState, Coords } from './types'
 
 export function initialGameState(): Game {
   return {
@@ -9,14 +9,14 @@ export function initialGameState(): Game {
 }
 
 // todo type for coords, function for nextplayer, 
-export const move = (game: Game, row: number, col: number): Game => {
+export const move = (game: Game, coords: Coords): Game => {
   // if clicked square is occupied, return
   // doesn't return a game, but if we care on the client side to give feedback of a bad move then we will implement
-  if (game.board[row][col] || game.endState) return game
+  if (game.board[coords.row][coords.col] || game.endState) return game
 
   // structuredClone the board
   const nextGame = structuredClone(game)
-  nextGame.board[row][col] = game.currentPlayer
+  nextGame.board[coords.row][coords.col] = game.currentPlayer
   
   const nextPlayer: Player = game.currentPlayer === 'x' ? 'o' : 'x'
 
