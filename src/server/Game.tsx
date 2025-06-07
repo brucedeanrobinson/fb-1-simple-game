@@ -1,8 +1,8 @@
 // Game.tsx
 import { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { TicTacToeApiClient } from './services/TicTacToeApi';
-import type { Coords, GameState } from './shared/types';
+import { TicTacToeApiClient } from '../services/TicTacToeApi';
+import type { Coords, GameState } from '../shared/types';
 
 export default function Game() {
   const { gameId } = useParams();
