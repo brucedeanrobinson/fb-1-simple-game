@@ -1,40 +1,29 @@
+import type { GameState, Player, EndState, Coords } from './types'
 
-type Player = 'x' | 'o'
-type Cell = Player | null
-export type Board = Cell[][]
-export type EndState = Player | 'tie' | null
-
-export type Game = {
-  board: Board,
-  currentPlayer: Player,
-  endState: EndState
-}
-
-export function initialGameState(): Game {
+export function createGame(): GameState {
   return {
+    id: crypto.randomUUID(),
     board: Array.from({length: 3}, () => Array(3).fill(null)),
     currentPlayer: 'x',
     endState: null
   }
 }
 
-// todo type for coords, function for nextplayer, 
-export const move = (game: Game, row: number, col: number) => {
-
+export const makeMove = (game: GameState, coords: Coords): GameState => {
   // if clicked square is occupied, return
   // doesn't return a game, but if we care on the client side to give feedback of a bad move then we will implement
-  if (game.board[row][col] || game.endState) return game
+  if (game.board[coords.row][coords.col] || game.endState) return game
 
   // structuredClone the board
   const nextGame = structuredClone(game)
-  nextGame.board[row][col] = game.currentPlayer
+  nextGame.board[coords.row][coords.col] = game.currentPlayer
   
   const nextPlayer: Player = game.currentPlayer === 'x' ? 'o' : 'x'
 
   return { ...nextGame, currentPlayer: nextPlayer, endState: getEndState(nextGame) }
 }
 
-export const getEndState = (game: Game): EndState => {
+export const getEndState = (game: GameState): EndState => {
   const { board } = game;
 
   // check wins
