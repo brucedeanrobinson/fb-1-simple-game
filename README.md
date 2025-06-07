@@ -51,13 +51,14 @@ shared/types.ts & game.ts
   - [x] add express endpoints (create, update, read)
   - [x] `api.client.ts`
   - [x] integrate `api-client` into `App.tsx`
-- [ ] PostgreSQL Supabase
+- [x] PostgreSQL Supabase
   - [x] .env
   - connects to a test db in Supabase when running locally, not polluting prod db
-- [ ] Drizzle.js
-  - [ ] `db-api.ts`
-  - [ ] swap in-mem to db
-  - run tests, run server, should work!
+- [x] Drizzle.js
+  - [x] `db-api.ts`
+  - [x] swap in-mem to db
+  - [ ] run tests, run server, should work!
+- [x] use supabase online db
 - [ ] tests that pass for both the in-memory and database implementations
 - [ ] aesthetics
 - [ ] gracefully handles slow internet connections when connections are very slow
