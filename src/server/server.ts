@@ -1,11 +1,12 @@
 import express from "express";
 import ViteExpress from "vite-express";
 import cors from "cors";
+import http from "http";
+import { Server } from "socket.io";
 
 // API
 import { DbTicTacToeApi } from "../db";
 import { PORT, SERVER_URL } from "../utils/constants";
-// const api = new InMemoryTicTacToeApi()
 const api = new DbTicTacToeApi()
 
 const app = express()
@@ -16,12 +17,7 @@ app.use(cors({
 
 app.use(express.json())
 
-/* Routes 
-ping
-create a game (there's no fetch game, server creates a game and holds it until death, for now...)
-get game id
-make a game move
-*/
+/** ROUTES */
 
 app.get("/ping", (_, res): void => { res.send("Server online."); });
 app.post("/api/game", async (_, res) => {
@@ -46,5 +42,31 @@ app.get("/api/games", async (_, res) => {
   }
 });
 
+/** SOCKETIO */
+
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*", // change to your client URL if needed
+    methods: ["GET", "POST"]
+  }
+});
+
+io.on("connection", (socket) => {
+  console.log(`🧠 Client connected: ${socket.id}`);
+
+  socket.on("join-game", (gameId) => {
+    socket.join(gameId);
+    console.log(`🟢 ${socket.id} joined game ${gameId}`);
+  });
+
+  socket.on("make-move", ({ gameId, move }) => {
+    socket.to(gameId).emit("move-made", move);
+  });
+
+  socket.on("disconnect", () => {
+    console.log(`🔌 Disconnected: ${socket.id}`);
+  });
+});
 
 ViteExpress.listen(app, PORT, () => console.log(`Server is listening... on ${SERVER_URL}`));
