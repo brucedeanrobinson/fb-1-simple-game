@@ -2,10 +2,10 @@ import express from "express";
 import ViteExpress from "vite-express";
 
 // API
-import { InMemoryTicTacToeApi } from "../services/TicTacToeApi";
+import { TicTacToeApiClient } from "../services/TicTacToeApi";
 import { PORT, SERVER_URL } from "../utils/constants";
-const api = new InMemoryTicTacToeApi()
-// const api = new TicTacToeApiClient()
+// const api = new InMemoryTicTacToeApi()
+const api = new TicTacToeApiClient()
 
 const app = express()
 app.use(express.json())
