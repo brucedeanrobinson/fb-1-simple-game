@@ -52,20 +52,25 @@ const io = new Server(server, {
   }
 });
 
-io.on("connection", (socket) => {
-  console.log(`🧠 Client connected: ${socket.id}`);
+io.on('connection', (socket) => {
+  console.log('Client connected');
 
-  socket.on("join-game", (gameId) => {
-    socket.join(gameId);
-    console.log(`🟢 ${socket.id} joined game ${gameId}`);
+  socket.on('join-lobby', () => {
+    socket.join('lobby');
+    console.log('Client joined lobby');
   });
 
-  socket.on("make-move", ({ gameId, move }) => {
-    socket.to(gameId).emit("move-made", move);
+  socket.on('leave-lobby', () => {
+    socket.leave('lobby');
   });
 
-  socket.on("disconnect", () => {
-    console.log(`🔌 Disconnected: ${socket.id}`);
+  socket.on('game-created', (game) => {
+    socket.to('lobby').emit('new-game', game);
+    console.log('Broadcasted new game to lobby');
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
   });
 });
 
