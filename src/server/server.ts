@@ -36,5 +36,15 @@ app.post("/api/game/:gameId/move", async (req, res) => {
   const game = await api.makeMove(req.params.gameId, {row: req.body.row, col: req.body.col})
   res.json(game)
 })
+app.get("/api/games", async (_, res) => {
+  try {
+    const games = await api.listJoinableGames?.();
+    res.json(games);
+  } catch (err) {
+    console.error("Failed to fetch games", err);
+    res.status(500).json({ error: "Could not fetch games" });
+  }
+});
+
 
 ViteExpress.listen(app, PORT, () => console.log(`Server is listening... on ${SERVER_URL}`));
