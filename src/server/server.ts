@@ -1,13 +1,19 @@
 import express from "express";
 import ViteExpress from "vite-express";
+import cors from "cors";
 
 // API
-import { TicTacToeApiClient } from "../services/TicTacToeApi";
+import { DbTicTacToeApi } from "../db";
 import { PORT, SERVER_URL } from "../utils/constants";
 // const api = new InMemoryTicTacToeApi()
-const api = new TicTacToeApiClient()
+const api = new DbTicTacToeApi()
 
 const app = express()
+app.use(cors({
+  origin: '*',
+  credentials: true
+}))
+
 app.use(express.json())
 
 /* Routes 
