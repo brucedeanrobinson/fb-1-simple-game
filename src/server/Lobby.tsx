@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { GameState } from '../shared/types';
+import socket from '../socket';
+import { SERVER_URL } from '../utils/constants';
 
 export default function Lobby() {
   const [games, setGames] = useState<GameState[]>([]);
@@ -8,16 +10,33 @@ export default function Lobby() {
 
   // Fetch games on mount
   useEffect(() => {
-    fetch("/api/games")
+    // Join the lobby room
+    socket.emit('join-lobby');
+
+    // Handle live updates of new games
+    socket.on('new-game', (game: GameState) => {
+      setGames((prevGames) => [...prevGames, game]);
+    });
+
+    // Fetch existing games
+    fetch(`${SERVER_URL}/api/games`)
       .then((res) => res.json())
       .then(setGames)
       .catch((err) => console.error("Failed to load games", err));
+
+    return () => {
+      socket.emit('leave-lobby');
+      socket.removeAllListeners('new-game');
+    };
   }, []);
 
   // Start new game and redirect
   const startNewGame = async () => {
     const res = await fetch("/api/game", { method: "POST" });
     const newGame = await res.json();
+
+    socket.emit('game-created', newGame);
+
     navigate(`/game/${newGame.id}`);
   };
 

@@ -1,11 +1,11 @@
 import express from "express";
-import ViteExpress from "vite-express";
 import cors from "cors";
+import http from "http";
+import { Server } from "socket.io";
 
 // API
 import { DbTicTacToeApi } from "../db";
-import { PORT, SERVER_URL } from "../utils/constants";
-// const api = new InMemoryTicTacToeApi()
+import { PORT } from "../utils/constants";
 const api = new DbTicTacToeApi()
 
 const app = express()
@@ -16,12 +16,7 @@ app.use(cors({
 
 app.use(express.json())
 
-/* Routes 
-ping
-create a game (there's no fetch game, server creates a game and holds it until death, for now...)
-get game id
-make a game move
-*/
+/** ROUTES */
 
 app.get("/ping", (_, res): void => { res.send("Server online."); });
 app.post("/api/game", async (_, res) => {
@@ -46,5 +41,63 @@ app.get("/api/games", async (_, res) => {
   }
 });
 
+/** SOCKETIO */
 
-ViteExpress.listen(app, PORT, () => console.log(`Server is listening... on ${SERVER_URL}`));
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*", // change to your client URL if needed
+    methods: ["GET", "POST"]
+  }
+});
+
+io.on('connection', (socket) => {
+  console.log('Client connected');
+
+  socket.on('join-lobby', () => {
+    socket.join('lobby');
+    console.log('Client joined lobby');
+  });
+
+  socket.on('leave-lobby', () => {
+    socket.leave('lobby');
+  });
+
+  socket.on('game-created', (game) => {
+    socket.to('lobby').emit('new-game', game);
+    console.log('Broadcasted new game to lobby');
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+  });
+
+  socket.on('join-game', (gameId) => {
+    socket.join(gameId);
+    console.log(`Client joined game ${gameId}`);
+  });
+  
+  socket.on('leave-game', (gameId) => {
+    socket.leave(gameId);
+    console.log(`Client left game ${gameId}`);
+  });
+  
+  socket.on('make-move', async ({ gameId, coords }) => {
+    console.log(`📥 Received move for game ${gameId}`, coords);
+    const updatedGame = await api.makeMove(gameId, coords);
+    console.log(`📤 Broadcasting game-updated to room ${gameId}`);
+    io.to(gameId).emit('game-updated', updatedGame);
+  });
+  
+});
+
+server.listen(PORT, () => {
+  console.log(`Server listening on http://localhost:${PORT}`);
+}).on('error', (err: Error & { code?: string }) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${PORT} is already in use. Close it or change it in constants.ts`);
+    process.exit(1);
+  } else {
+    throw err;
+  }
+});
