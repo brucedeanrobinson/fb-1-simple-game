@@ -1,32 +1,44 @@
 // Game.tsx
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { TicTacToeApiClient } from '../services/TicTacToeApi';
 import type { Coords, GameState } from '../shared/types';
+import socket from '../socket';
 
 export default function Game() {
   const { gameId } = useParams();
-  const api = useMemo(() => new TicTacToeApiClient(), []);
   const [game, setGame] = useState<GameState | undefined>();
 
   useEffect(() => {
     if (!gameId) return;
 
-    api.getGame(gameId)
-      .then((game) => {
-        console.log("Fetched game:", game);
-        setGame(game);
-      })
-      .catch((err) => {
-        console.error("Failed to load game", err);
-      });
+    // Join the socket room for this game
+    socket.emit('join-game', gameId);
+
+    // Receive live game state updates
+    socket.on('game-updated', (newGame: GameState) => {
+      console.log('Received updated game', newGame);
+      setGame(newGame);
+    });
+
+    // Initial fetch
+    fetch(`/api/game/${gameId}`)
+      .then((res) => res.json())
+      .then(setGame)
+      .catch(() => setGame(undefined));
+
+    // Clean up
+    return () => {
+      socket.emit('leave-game', gameId);
+      socket.off('game-updated');
+    };
   }, [gameId]);
 
-  const handleCellClick = async (coords: Coords) => {
+  const handleCellClick = (coords: Coords) => {
     if (!gameId || !game) return;
-    const newGameState = await api.makeMove(gameId, coords);
-    setGame(newGameState);
+    console.log('Clicking cell:', coords);
+    socket.emit('make-move', { gameId, coords });
   };
+
 
   if (!game) return <div>Loading...</div>;
 
