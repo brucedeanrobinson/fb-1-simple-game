@@ -14,10 +14,6 @@ export default function App() {
     socket.on('disconnect', () => {
       console.log('Socket disconnected');
     });
-
-    return () => {
-      socket.disconnect();
-    };
   }, []);
 
   return (

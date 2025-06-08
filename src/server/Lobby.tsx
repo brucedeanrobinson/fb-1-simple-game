@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { GameState } from '../shared/types';
 import socket from '../socket';
+import { SERVER_URL } from '../utils/constants';
 
 export default function Lobby() {
   const [games, setGames] = useState<GameState[]>([]);
@@ -18,14 +19,14 @@ export default function Lobby() {
     });
 
     // Fetch existing games
-    fetch("/api/games")
+    fetch(`${SERVER_URL}/api/games`)
       .then((res) => res.json())
       .then(setGames)
       .catch((err) => console.error("Failed to load games", err));
 
     return () => {
       socket.emit('leave-lobby');
-      socket.off('new-game');
+      socket.removeAllListeners('new-game');
     };
   }, []);
 

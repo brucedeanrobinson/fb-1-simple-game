@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import type { Coords, GameState } from '../shared/types';
 import socket from '../socket';
+import { SERVER_URL } from '../utils/constants';
 
 export default function Game() {
   const { gameId } = useParams();
@@ -21,7 +22,7 @@ export default function Game() {
     });
 
     // Initial fetch
-    fetch(`/api/game/${gameId}`)
+    fetch(`${SERVER_URL}/api/game/${gameId}`)
       .then((res) => res.json())
       .then(setGame)
       .catch(() => setGame(undefined));
@@ -29,7 +30,7 @@ export default function Game() {
     // Clean up
     return () => {
       socket.emit('leave-game', gameId);
-      socket.off('game-updated');
+      socket.removeAllListeners('game-updated');
     };
   }, [gameId]);
 
